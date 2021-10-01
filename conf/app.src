@@ -1,7 +1,7 @@
-SOURCE_URL=url of app's source
-SOURCE_SUM=sha256 checksum
+SOURCE_URL=https://raw.githubusercontent.com/penpot/penpot/main/docker/images/docker-compose.yaml
+SOURCE_SUM=1aeb04bfebce0687dfbb8fb9a7f694d9daa9e87e7268510ae76faa9459795369
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=tar.gz
-SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=
-SOURCE_EXTRACT=true
+SOURCE_FORMAT=yaml
+SOURCE_IN_SUBDIR=false
+SOURCE_FILENAME=docker-compose.yaml
+SOURCE_EXTRACT=false

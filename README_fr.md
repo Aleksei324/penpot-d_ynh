@@ -21,11 +21,6 @@ Expliquez en *quelques* (10~15) mots l'utilité de l'app ou ce qu'elle fait (l'o
 ## Captures d'écran
 
 
-   ![](./doc/screenshots/example.jpg)
-
-
-
-
 ## Avertissements / informations importantes
 
 * Any known limitations, constrains or stuff not working, such as (but not limited to):

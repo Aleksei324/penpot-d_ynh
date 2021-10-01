@@ -39,11 +39,6 @@ Explain in *a few (10~15) words* the purpose of the app or what it actually does
 ## Screenshots
 
 
-   ![](./doc/screenshots/example.jpg)
-
-
-
-
 ## Disclaimers / important information
 
 * Any known limitations, constrains or stuff not working, such as (but not limited to):
