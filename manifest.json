@@ -54,7 +54,7 @@
             },
             {
                 "name": "penpot_demo_warning",
-                "type": "boolean"
+                "type": "boolean",
                 "default": false,
                 "help": {
                     "en": "Show a warning in the register and login page saying that this is a demostration purpose instance (no backups, periodical data wipe, ...), default is 'false'",
