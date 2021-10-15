@@ -6,12 +6,11 @@
         "en": "Open Source design and prototyping platform.",
         "fr": "Plate-forme de conception et de prototypage à code source ouvert."
     },
-    "version": "1.9.0-alpha~ynh1",
+    "version": "1.9.0~ynh1",
     "url": "https://penpot.app",
     "upstream": {
         "license": "MPL-2.0",
         "website": "https://penpot.app",
-        "demo": "https://penpot.app",
         "admindoc": "https://help.penpot.app/technical-guide/",
         "userdoc": "https://help.penpot.app/user-guide/",
         "code": "https://github.com/penpot/penpot"
@@ -32,17 +31,16 @@
             {
                 "name": "penpot_public_uri",
                 "type": "domain",
-                "default": "http://localhost:9001",
-                "help": {
-                    "en": "The public URI that users will use to access the application, default is 'http://localhost:9001'",
-                    "fr": "L'URI public que les utilisateurs utiliseront pour accéder à l'application, la valeur par défaut est 'http://localhost:9001'"
+                "ask": {
+                    "en": "The public URI that users will use to access the application, an example could be 'http://localhost:9001'",
+                    "fr": "L'URI public que les utilisateurs utiliseront pour accéder à l'application, un exemple pourrait être 'http://localhost:9001'"
                 }
             },
             {
                 "name": "penpot_allow_demo_users",
                 "type": "boolean",
                 "default": false,
-                "help": {
+                "ask": {
                     "en": "Allow demo users, users without the need of a registration process, default is 'false'",
                     "fr": "Autoriser les utilisateurs de démonstration, les utilisateurs sans besoin d'un processus d'enregistrement, la valeur par défaut est 'false'"
                 }
@@ -50,13 +48,17 @@
             {
                 "name": "penpot_registration_enabled",
                 "type": "boolean",
-                "default": true
+                "default": true,
+                "ask": {
+                    "en": "Allow the registration of new users, default is 'true'",
+                    "fr": "Permettre l'enregistrement de nouveaux utilisateurs, la valeur par défaut est 'true'"
+                }
             },
             {
                 "name": "penpot_demo_warning",
                 "type": "boolean",
                 "default": false,
-                "help": {
+                "ask": {
                     "en": "Show a warning in the register and login page saying that this is a demostration purpose instance (no backups, periodical data wipe, ...), default is 'false'",
                     "fr": "Afficher un avertissement dans la page d'inscription et de connexion indiquant qu'il s'agit d'une instance de démonstration (pas de sauvegardes, effacement périodique des données, ...), la valeur par défaut est 'false'"
                 }
