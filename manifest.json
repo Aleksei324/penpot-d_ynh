@@ -29,10 +29,19 @@
     "arguments": {
         "install" : [
             {
-                "name": "penpot_public_uri",
+                "name": "admin",
+                "type": "user",
                 "ask": {
-                    "en": "The public URI that users will use to access the application, an example could be 'http://localhost:9001'",
-                    "fr": "L'URI public que les utilisateurs utiliseront pour accéder à l'application, un exemple pourrait être 'http://localhost:9001'"
+                    "en": "Administrator for this app",
+                    "fr": "Administrateur de cette application"
+                }
+            },
+            {
+                "name": "penpot_public_uri",
+                "type": "domain",
+                "ask": {
+                    "en": "The public URI that users will use to access the application",
+                    "fr": "L'URI public que les utilisateurs utiliseront pour accéder à l'application"
                 }
             },
             {
