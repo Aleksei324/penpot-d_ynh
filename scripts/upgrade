@@ -17,7 +17,8 @@ ynh_script_progression --message="Loading installation settings..." --time --wei
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
+path=$(ynh_app_setting_get --app=$app --key=path)
+path_docker=$(ynh_app_setting_get --app=$app --key=path_docker)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
@@ -87,7 +88,7 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --time --weight=1
 
-	$(cd $final_path && docker-compose down)
+	$(cd $final_path && docker-compose down && docker-compose -f docker-compose.yaml pull)
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
@@ -153,14 +154,6 @@ chown $app:$app "$final_path/config.env"
 # GENERIC FINALIZATION
 
 docker-compose -p penpot -f $final_path/docker-compose.yaml up -d
-
-#=================================================
-# UPGRADE FAIL2BAN
-#=================================================
-ynh_script_progression --message="Reconfiguring Fail2Ban..." --time --weight=1
-
-# Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
 
 #=================================================
 # RELOAD NGINX

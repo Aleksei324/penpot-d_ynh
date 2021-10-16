@@ -13,11 +13,6 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
-ynh_clean_setup () {
-	### Remove this function if there's nothing to clean before calling the remove script.
-	rm $final_path/config.env
-	rm $final_path/docker-compose.yaml
-}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -25,14 +20,28 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-public_uri=$YNH_APP_ARG_PENPOT_PUBLIC_URI
 allow_demo_users=$YNH_APP_ARG_PENPOT_ALLOW_DEMO_USERS
 registration_enabled=$YNH_APP_ARG_PENPOT_REGISTRATION_ENABLED
 demo_warning=$YNH_APP_ARG_PENPOT_DEMO_WARNING
+telemetry_enabled=$YNH_APP_ARG_PENPOT_TELEMETRY_ENABLED
+
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
+is_public=$YNH_APP_ARG_IS_PUBLIC
+
+### If it's a multi-instance app, meaning it can be installed several times independently
+### The id of the app as stated in the manifest is available as $YNH_APP_ID
+### The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2"...)
+### The app instance name is available as $YNH_APP_INSTANCE_NAME
+###    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
+###    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
+###    - ynhexample__{N} for the subsequent installations, with N=3,4...
+### The app instance name is probably what interests you most, since this is
+### guaranteed to be unique. This is a good unique identifier to define installation path,
+### db names...
 
 app=$YNH_APP_INSTANCE_NAME
-admin=$YNH_APP_ARG_ADMIN
-path_url="/"
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
@@ -53,19 +62,20 @@ final_path=/opt/yunohost/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
-ynh_webpath_register --app=$app --domain=$public_uri --path_url=$path_url
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --time --weight=1
 
-ynh_app_setting_set --app=$app --key=domain --value=$public_uri
 ynh_app_setting_set --app=$app --key=allow_demo_users --value=$allow_demo_users
 ynh_app_setting_set --app=$app --key=registration_enabled --value=$registration_enabled
+ynh_app_setting_set --app=$app --key=telemetry_enabled --value=$telemetry_enabled
 ynh_app_setting_set --app=$app --key=demo_warning --value=$demo_warning
 
-ynh_app_setting_set --app=$app --key=path_url --value=$path_url
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 
 #=================================================
@@ -81,16 +91,18 @@ ynh_script_progression --message="Finding an available port..." --time --weight=
 ###		- Remove the section "CLOSE A PORT" in the remove script
 
 # Find an available port
-port=$(ynh_find_port --port=6060)
+port=$(ynh_find_port --port=9001)
+port_http=$(ynh_find_port --port=6060)
 ynh_app_setting_set --app=$app --key=port --value=$port
+ynh_app_setting_set --app=$app --key=port_http --value=$port_http
 
 # Optional: Expose this port publicly
 # (N.B.: you only need to do this if the app actually needs to expose the port publicly.
 # If you do this and the app doesn't actually need you are CREATING SECURITY HOLES IN THE SERVER !)
 
 # Open the port
-# ynh_script_progression --message="Configuring firewall..." --time --weight=1
-# ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+#ynh_script_progression --message="Configuring firewall..." --time --weight=1
+#ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -143,6 +155,9 @@ chown -R $app:www-data "$final_path"
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --time --weight=1
+
+ynh_replace_string "YNH_PATH" "$path" ../conf/nginx.conf
+ynh_replace_string "YNH_REDIRECT_PATH" "https://$domain:$port" ../conf/nginx.conf
 
 ### `ynh_add_nginx_config` will use the file conf/nginx.conf
 
@@ -205,7 +220,7 @@ ynh_add_config --template="config.env" --destination="$final_path/config.env"
 # FIXME: this should be handled by the core in the future
 # You may need to use chmod 600 instead of 400,
 # for example if the app is expected to be able to modify its own config
-chmod 400 "$final_path/config.env"
+chmod 600 "$final_path/config.env"
 chown $app:$app "$final_path/config.env"
 
 ### For more complex cases where you want to replace stuff using regexes,
@@ -217,16 +232,7 @@ chown $app:$app "$final_path/config.env"
 
 #=================================================
 # GENERIC FINALIZATION
-
 docker-compose -p penpot -f $final_path/docker-compose.yaml up -d
-
-#=================================================
-# SETUP FAIL2BAN
-#=================================================
-ynh_script_progression --message="Configuring Fail2Ban..." --time --weight=1
-
-# Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
 
 #=================================================
 # SETUP SSOWAT
@@ -245,12 +251,12 @@ fi
 ### does have for example an admin interface or an API.
 
 # Only the admin can access the admin panel of the app (if the app has an admin panel)
-ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
+#ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
 
 # Everyone can access the API part
 # We don't want to display the tile in the SSO so we put --show_tile="false"
 # And we don't want the YunoHost admin to be able to remove visitors group to this permission, so we put --protected="true"
-ynh_permission_create --permission="api" --url="/api" --allowed="visitors" --show_tile="false" --protected="true"
+#ynh_permission_create --permission="api" --url="/api" --allowed="visitors" --show_tile="false" --protected="true"
 
 #=================================================
 # RELOAD NGINX

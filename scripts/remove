@@ -18,6 +18,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 port=$(ynh_app_setting_get --app=$app --key=port)
+port_http=$(ynh_app_setting_get --app=$app --key=port_http)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
@@ -25,6 +26,8 @@ datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 # STANDARD REMOVE
 
 $(cd $final_path && docker-compose down)
+rm $final_path/config.env
+rm $final_path/docker-compose.yaml
 
 #=================================================
 # REMOVE DEPENDENCIES
@@ -71,13 +74,11 @@ then
 	ynh_exec_warn_less yunohost firewall disallow TCP $port
 fi
 
-#=================================================
-# REMOVE FAIL2BAN CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing Fail2ban configuration..." --time --weight=1
-
-# Remove the dedicated Fail2Ban config
-ynh_remove_fail2ban_config
+if yunohost firewall list | grep -q "\- $port_http$"
+then
+	ynh_script_progression --message="Closing port $port_http..." --time --weight=1
+	ynh_exec_warn_less yunohost firewall disallow TCP $port_http
+fi
 
 #=================================================
 # SPECIFIC REMOVE

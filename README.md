@@ -5,8 +5,8 @@ It shall NOT be edited by hand.
 
 # Penpot for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/penpot.svg)](https://dash.yunohost.org/appci/app/penpot) ![](https://ci-apps.yunohost.org/ci/badges/penpot.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/penpot.maintain.svg)  
-[![Install Penpot with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=penpot)
+[![Integration level](https://dash.yunohost.org/integration/penpot-d.svg)](https://dash.yunohost.org/appci/app/penpot-d) ![](https://ci-apps.yunohost.org/ci/badges/penpot-d.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/penpot-d.maintain.svg)  
+[![Install Penpot with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=penpot-d)
 
 *[Lire ce readme en français.](./README_fr.md)*
 
@@ -18,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 Penpot is the first Open Source design and prototyping platform meant for cross-domain teams. Non dependent on operating systems, Penpot is web based and works with open web standards (SVG). For all and empowered by the community.
 
 
-**Shipped version:** 1.9.0~ynh1
+**Shipped version:** 1.10~ynh1
 
 
 
@@ -29,21 +29,21 @@ Penpot is the first Open Source design and prototyping platform meant for cross-
 ## Documentation and resources
 
 * Official app website: https://penpot.app
-* Official user documentation: https://help.penpot.app/user-guide/
-* Official admin documentation: https://help.penpot.app/technical-guide/
+* Official user documentation: https://help.penpot.app/user-guide
+* Official admin documentation: https://help.penpot.app/technical-guide
 * Upstream app code repository: https://github.com/penpot/penpot
-* YunoHost documentation for this app: https://yunohost.org/app_penpot
-* Report a bug: https://github.com/YunoHost-Apps/penpot_ynh/issues
+* YunoHost documentation for this app: https://yunohost.org/app_penpot-d
+* Report a bug: https://github.com/YunoHost-Apps/penpot-d_ynh/issues
 
 ## Developer info
 
-Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/penpot_ynh/tree/testing).
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/penpot-d_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
-sudo yunohost app install https://github.com/YunoHost-Apps/penpot_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/penpot-d_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade penpot -u https://github.com/YunoHost-Apps/penpot_ynh/tree/testing --debug
+sudo yunohost app upgrade penpot-d -u https://github.com/YunoHost-Apps/penpot-d_ynh/tree/testing --debug
 ```
 
 **More info regarding app packaging:** https://yunohost.org/packaging_apps
