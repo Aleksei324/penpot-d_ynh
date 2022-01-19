@@ -158,6 +158,7 @@ ynh_script_progression --message="Configuring NGINX web server..." --time --weig
 
 ynh_replace_string "YNH_PATH" "$path" ../conf/nginx.conf
 ynh_replace_string "YNH_REDIRECT_PATH" "$domain:$port" ../conf/nginx.conf
+ynh_replace_string "YNH_PORT" "$port_http" ../conf/nginx.conf
 
 ### `ynh_add_nginx_config` will use the file conf/nginx.conf
 
