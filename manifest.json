@@ -58,14 +58,14 @@
             {
                 "name": "penpot_allow_demo_users",
                 "type": "string",
-                "default": "disable-demo-users",
+                "default": "enable-demo-users",
 				"choices": {
-					"enable-demo-users": "Enabled",
-					"disable-demo-users": "Disabled"
+					"enable-demo-users": "Allow",
+					"disable-demo-users": "Do not allow"
 				},
                 "ask": {
-                    "en": "Allow demo users, users without the need of a registration process, default is 'disabled'",
-                    "fr": "Autoriser les utilisateurs de démonstration, les utilisateurs sans besoin d'un processus d'enregistrement, la valeur par défaut est 'disabled'"
+                    "en": "Allow demo users, users without the need of a registration process, default is 'allow'",
+                    "fr": "Autoriser les utilisateurs de démonstration, les utilisateurs sans besoin d'un processus d'enregistrement, la valeur par défaut est 'allow'"
                 }
             },
             {
@@ -73,12 +73,12 @@
                 "type": "string",
                 "default": "enable-registration",
 				"choices": {
-					"enable-registration": "Enabled",
-					"disable-registration": "Disabled"
+					"enable-registration": "Allow",
+					"disable-registration": "Do not allow"
 				},
                 "ask": {
-                    "en": "Allow the registration of new users, default is 'enabled'",
-                    "fr": "Permettre l'enregistrement de nouveaux utilisateurs, la valeur par défaut est 'enabled'"
+                    "en": "Allow the registration of new users, default is 'allow'",
+                    "fr": "Permettre l'enregistrement de nouveaux utilisateurs, la valeur par défaut est 'allow'"
                 }
             },
 			{
